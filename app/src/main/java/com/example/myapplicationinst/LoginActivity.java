@@ -134,7 +134,9 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         if (mRemmenberMe.isChecked()) {
-            remmenberMeFun();
+            if (!mEmailInputLayout.getEditText().getText().toString().trim().equals("")) {
+                remmenberMeFun();
+            }
         }
     }
 
