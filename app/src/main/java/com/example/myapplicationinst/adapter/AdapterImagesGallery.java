@@ -13,19 +13,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplicationinst.R;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 public class AdapterImagesGallery extends RecyclerView.Adapter<AdapterImagesGallery.ViewHolderImageGallery> {
 
     private static final String TAG = "AdapterImagesGallery";
-
     public List<String> vDataList;
     public Context vContext;
+    private AdapterImageGalleryInterface vListener;
 
     public AdapterImagesGallery(List<String> vDataList, Context vContext) {
-        Log.d(TAG, "AdapterImagesGallery: ****"+vDataList.size());
+        Log.d(TAG, "AdapterImagesGallery: ****" + vDataList.size());
         this.vDataList = vDataList;
         this.vContext = vContext;
     }
@@ -46,16 +45,44 @@ public class AdapterImagesGallery extends RecyclerView.Adapter<AdapterImagesGall
 
     @Override
     public int getItemCount() {
-        Log.d(TAG, "getItemCount: **** "+vDataList.size());
+        Log.d(TAG, "getItemCount: **** " + vDataList.size());
         return vDataList.size();
+    }
+
+    public interface AdapterImageGalleryInterface {
+        public void getImagePosition(int pos, String src,boolean check);
+    }
+
+    public void setAdapterImageGalleryInterface(AdapterImageGalleryInterface vListener)
+    {
+        this.vListener = vListener;
     }
 
     public class ViewHolderImageGallery extends RecyclerView.ViewHolder {
         private ImageView mImageView;
-
-        public ViewHolderImageGallery(@NonNull View itemView) {
+        private ImageView mImageViewSelected;
+        public ViewHolderImageGallery(@NonNull final View itemView) {
             super(itemView);
             mImageView = itemView.findViewById(R.id.cardview_callary_image_imageview);
+            mImageViewSelected = itemView.findViewById(R.id.cardview_callary_image_selected);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (getAdapterPosition() != RecyclerView.NO_POSITION) {
+                        if(mImageViewSelected.getVisibility()==View.VISIBLE)
+                        {
+                            mImageViewSelected.setVisibility(View.GONE);
+                            vListener.getImagePosition(getAdapterPosition(),vDataList.get(getAdapterPosition()),false);
+                        }
+                        else
+                        {
+                            mImageViewSelected.setVisibility(View.VISIBLE);
+                            vListener.getImagePosition(getAdapterPosition(),vDataList.get(getAdapterPosition()),true);
+                        }
+                    }
+                }
+            });
         }
     }
+
 }

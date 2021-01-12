@@ -1,13 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="200dp"
     android:layout_height="200dp">
 
-    <ImageView
-        android:id="@+id/cardview_callary_image_imageview"
-        android:src="@mipmap/ic_launcher"
-        android:scaleType="fitXY"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"/>
+        android:layout_height="fill_parent">
+
+
+        <ImageView
+
+            android:id="@+id/cardview_callary_image_imageview"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:scaleType="fitXY"
+            android:src="@mipmap/ic_launcher"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/cardview_callary_image_selected"
+            android:visibility="gone"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@null"
+            android:src="@drawable/ic_baseline_check_24"
+            app:layout_constraintBottom_toBottomOf="@id/cardview_callary_image_imageview"
+            app:layout_constraintLeft_toLeftOf="@id/cardview_callary_image_imageview"
+            app:layout_constraintRight_toRightOf="@id/cardview_callary_image_imageview"
+            app:layout_constraintTop_toTopOf="@id/cardview_callary_image_imageview" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>
