@@ -19,5 +19,19 @@
         android:id="@+id/addPhotoFragment"
         android:name="com.example.myapplicationinst.AddPhotoFragment"
         android:label="fragment_add_photo"
-        tools:layout="@layout/fragment_add_photo" />
+        tools:layout="@layout/fragment_add_photo">
+        <action
+            android:id="@+id/action_addPhotoFragment_to_postFragment"
+            app:destination="@id/postFragment" />
+        <argument
+            android:name="str"
+            app:argType="integer"
+            android:defaultValue="1" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/postFragment"
+        android:name="com.example.myapplicationinst.PostFragment"
+        android:label="fragment_post"
+        tools:layout="@layout/fragment_post" />
 </navigation>

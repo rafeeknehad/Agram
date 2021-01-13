@@ -7,7 +7,7 @@
     tools:context=".AddPhotoFragment">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:backgroundTint="@android:color/white"
+        android:backgroundTint="#17202A"
         android:id="@+id/fragment_add_photo_app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="300dp"

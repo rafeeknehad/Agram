@@ -23,6 +23,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
@@ -153,12 +154,14 @@ public class AddPhotoFragment extends Fragment {
     }
 
     private void AddPost() {
-
+        //R.id.action_addPhotoFragment_to_postFragment
+        Bundle bundle = new Bundle();
+        bundle.putString("rrr","rrrrr");
+        Navigation.findNavController(getView()).navigate(R.id.action_addPhotoFragment_to_postFragment);
     }
 
     private void openCameraFun() {
         Intent imageIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
         if (imageIntent.resolveActivity(getActivity().getPackageManager()) != null) {
             startActivityForResult(imageIntent, RQEUEST_IMAGE_CAPTURE);
         }
