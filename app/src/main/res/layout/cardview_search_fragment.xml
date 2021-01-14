@@ -16,8 +16,8 @@
             android:src="@mipmap/ic_launcher"
             app:layout_constraintTop_toTopOf="parent"
             android:id="@+id/cardview_search_fragment_userprofiel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_width="100dp"
+            android:layout_height="100dp"/>
 
         <TextView
             android:id="@+id/cardview_search_fragment_username"
