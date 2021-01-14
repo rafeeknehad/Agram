@@ -32,6 +32,7 @@ import com.example.myapplicationinst.adapter.AdapterImagesGallery;
 import com.example.myapplicationinst.adapter.MyPagerAdapter;
 import com.example.myapplicationinst.util.ImageGallery;
 import com.example.myapplicationinst.util.ImageViewPager;
+import com.example.myapplicationinst.util.ImageViewPagerSelerization;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
@@ -54,7 +55,7 @@ public class AddPhotoFragment extends Fragment {
     private List<String> vImageGallaryList;
     private List<ImageViewPager> vPostImage;
     private List<String> vPostImageIndex;
-
+    private List<Fragment> fragmentArrayList;
     //adapter
     private AdapterImagesGallery vAdapterImagesGallery;
 
@@ -154,10 +155,10 @@ public class AddPhotoFragment extends Fragment {
     }
 
     private void AddPost() {
-        //R.id.action_addPhotoFragment_to_postFragment
-        Bundle bundle = new Bundle();
-        bundle.putString("rrr","rrrrr");
-        Navigation.findNavController(getView()).navigate(R.id.action_addPhotoFragment_to_postFragment);
+        ImageViewPagerSelerization selerization = new ImageViewPagerSelerization(vPostImage);
+        Log.d(TAG, "AddPost: "+getActivity().getString(R.string.logd)+"  "+selerization.getImageViewPagers().size());
+        AddPhotoFragmentDirections.ActionAddPhotoFragmentToPostFragment action = AddPhotoFragmentDirections.actionAddPhotoFragmentToPostFragment(selerization);
+        Navigation.findNavController(getView()).navigate(action);
     }
 
     private void openCameraFun() {
@@ -178,7 +179,7 @@ public class AddPhotoFragment extends Fragment {
     }
 
     private void initViewOagerFun(List<ImageViewPager> arrayList) {
-        ArrayList<Fragment> fragmentArrayList = new ArrayList<>();
+        fragmentArrayList = new ArrayList<>();
         for (ImageViewPager imageViewPager : vPostImage) {
             ViewPagerItemFragment viewPagerItemFragment = ViewPagerItemFragment.getInstance(imageViewPager);
             fragmentArrayList.add(viewPagerItemFragment);

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginBottom="10sp"
+    app:cardCornerRadius="10sp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10sp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            app:layout_constraintStart_toStartOf="parent"
+            android:src="@mipmap/ic_launcher"
+            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/cardview_search_fragment_userprofiel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/cardview_search_fragment_username"
+            android:layout_marginLeft="20sp"
+            app:layout_constraintRight_toLeftOf="@id/cardview_search_fragment_delete"
+            android:text="User Profile Name"
+            app:layout_constraintStart_toEndOf="@id/cardview_search_fragment_userprofiel"
+            app:layout_constraintBottom_toBottomOf="@id/cardview_search_fragment_userprofiel"
+            app:layout_constraintTop_toTopOf="@id/cardview_search_fragment_userprofiel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <ImageView
+            android:background="@null"
+            android:src="@drawable/ic_close"
+            android:id="@+id/cardview_search_fragment_delete"
+            app:layout_constraintBottom_toBottomOf="@id/cardview_search_fragment_userprofiel"
+            app:layout_constraintTop_toTopOf="@id/cardview_search_fragment_userprofiel"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="30dp"
+            android:layout_height="30dp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>
