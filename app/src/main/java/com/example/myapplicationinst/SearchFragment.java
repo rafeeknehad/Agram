@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplicationinst.adapter.SearchFragmentAdapter;
 import com.example.myapplicationinst.model.User;
+import com.example.myapplicationinst.modelclass.SearchFragmentModel;
 
 import java.util.List;
 

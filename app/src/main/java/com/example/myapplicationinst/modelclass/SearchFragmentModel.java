@@ -1,4 +1,4 @@
-package com.example.myapplicationinst;
+package com.example.myapplicationinst.modelclass;
 
 import android.app.Application;
 import android.util.Log;

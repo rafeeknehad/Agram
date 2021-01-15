@@ -106,7 +106,7 @@ public class AddPhotoFragment extends Fragment {
         Log.d(TAG, "setDataFun: **** " + vImageGallaryList.size());
         vAdapterImagesGallery = new AdapterImagesGallery(vImageGallaryList, getActivity());
         mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2, RecyclerView.VERTICAL, false));
+        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3, RecyclerView.VERTICAL, false));
         mRecyclerView.setAdapter(vAdapterImagesGallery);
     }
 

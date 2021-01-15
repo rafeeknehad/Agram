@@ -7,6 +7,9 @@ public class ImageViewPager implements Parcelable {
 
     private String imgaeSrc;
 
+    public ImageViewPager() {
+    }
+
     public ImageViewPager(String imgaeSrc) {
         this.imgaeSrc = imgaeSrc;
     }

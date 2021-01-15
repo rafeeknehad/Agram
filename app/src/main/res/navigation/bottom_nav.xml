@@ -14,7 +14,11 @@
         android:id="@+id/profileFragment"
         android:name="com.example.myapplicationinst.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/action_profileFragment_to_userPostFragment"
+            app:destination="@id/userPostFragment" />
+    </fragment>
     <fragment
         android:id="@+id/addPhotoFragment"
         android:name="com.example.myapplicationinst.AddPhotoFragment"
@@ -29,7 +33,7 @@
         android:id="@+id/postFragment"
         android:name="com.example.myapplicationinst.PostFragment"
         android:label="fragment_post"
-        tools:layout="@layout/fragment_post" >
+        tools:layout="@layout/fragment_post">
         <argument
             android:name="image_post"
             app:argType="com.example.myapplicationinst.util.ImageViewPagerSelerization" />
@@ -42,4 +46,15 @@
         android:name="com.example.myapplicationinst.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" />
+
+
+    <fragment
+        android:id="@+id/userPostFragment"
+        android:name="com.example.myapplicationinst.UserPostFragment"
+        android:label="fragment_user_post"
+        tools:layout="@layout/fragment_user_post">
+        <argument
+            android:name="userPosts"
+            app:argType="com.example.myapplicationinst.util.UserPostFragmentSelerization" />
+    </fragment>
 </navigation>
