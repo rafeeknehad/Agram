@@ -20,7 +20,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
@@ -81,8 +80,18 @@ public class AddPhotoFragment extends Fragment {
         setHasOptionsMenu(true);
 
         checkReadStoragePermissionFun();
-        setDataFun();
+        //setDataFun();
+        return view;
+    }
 
+    private void setDataFun() {
+        Log.d(TAG, "setDataFun: 123456789");
+        vImageGallaryList = ImageGallery.getAllImages(getActivity());
+        Log.d(TAG, "setDataFun: **** " + vImageGallaryList.size());
+        vAdapterImagesGallery = new AdapterImagesGallery(vImageGallaryList, getActivity());
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3, RecyclerView.VERTICAL, false));
+        mRecyclerView.setAdapter(vAdapterImagesGallery);
         vAdapterImagesGallery.setAdapterImageGalleryInterface(new AdapterImagesGallery.AdapterImageGalleryInterface() {
             @Override
             public void getImagePosition(int pos, String src, boolean check) {
@@ -98,35 +107,32 @@ public class AddPhotoFragment extends Fragment {
                 }
             }
         });
-        return view;
-    }
-
-    private void setDataFun() {
-        vImageGallaryList = ImageGallery.getAllImages(getActivity());
-        Log.d(TAG, "setDataFun: **** " + vImageGallaryList.size());
-        vAdapterImagesGallery = new AdapterImagesGallery(vImageGallaryList, getActivity());
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3, RecyclerView.VERTICAL, false));
-        mRecyclerView.setAdapter(vAdapterImagesGallery);
     }
 
     private void checkReadStoragePermissionFun() {
+        Log.d(TAG, "checkReadStoragePermissionFun: 123456789 ");
         if (ContextCompat.checkSelfPermission(getActivity(),
                 Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) //not add
         {
-            ActivityCompat.requestPermissions(getActivity(),
+            Log.d(TAG, "checkReadStoragePermissionFun: 123456789");
+            requestPermissions(
                     new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, READ_PERMISSION_CODE);
+        } else {
+            setDataFun();
         }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        Log.d(TAG, "onRequestPermissionsResult: 123456789 ");
         if (requestCode == READ_PERMISSION_CODE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.d(TAG, "onRequestPermissionsResult: 123456789 ");
                 Toast.makeText(getActivity(), "Read external storage permission granded", Toast.LENGTH_SHORT).show();
                 setDataFun();
             } else {
+                Log.d(TAG, "onRequestPermissionsResult: 123456789 ");
                 Toast.makeText(getActivity(), "Read external storage permission denied", Toast.LENGTH_SHORT).show();
             }
         }
@@ -174,7 +180,6 @@ public class AddPhotoFragment extends Fragment {
         if (requestCode == RQEUEST_IMAGE_CAPTURE && resultCode == getActivity().RESULT_OK) {
             Bundle bundle = data.getExtras();
             Bitmap bitmap = (Bitmap) bundle.get("data");
-            Log.d(TAG, "onActivityResult: **** " + bitmap.toString());
         }
     }
 

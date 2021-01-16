@@ -37,8 +37,8 @@ public class ProfileFragmentAdapter extends RecyclerView.Adapter<ProfileFragment
     @Override
     public void onBindViewHolder(@NonNull ProfileFragmentViewHolder holder, int position) {
         Post post = mPostList.get(position);
-        Bitmap bitmap = BitmapFactory.decodeFile(post.getImageViewPagers().get(0).getImgaeSrc());
-        holder.imageView.setImageBitmap(bitmap);
+        //Bitmap bitmap = BitmapFactory.decodeFile(post.getImageViewPagers().get(0).getImgaeSrc());
+        //holder.imageView.setImageBitmap(bitmap);
     }
 
     @Override

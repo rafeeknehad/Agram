@@ -29,6 +29,7 @@ public class MyPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
+        Log.d(TAG, "getCount: ***** "+fragments.size());
         return fragments.size();
     }
 }

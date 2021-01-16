@@ -89,19 +89,18 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostsViewHol
                     }
                 });
 
-        Log.d(TAG, "onBindViewHolder: **** 2 " + post.getImageViewPagers().size());
+
+        /*Log.d(TAG, "onBindViewHolder: qqqqqq " + post.getImageViewPagers().size());
         for (ImageViewPager imageViewPager : post.getImageViewPagers()) {
             ViewPagerItemFragment viewPagerItemFragment = ViewPagerItemFragment.getInstance(imageViewPager);
             mFragmentList.add(viewPagerItemFragment);
         }
-
-
-        Log.d(TAG, "onBindViewHolder: **** 1 " + mFragmentList.size());
+        Log.d(TAG, "onBindViewHolder: qqqqqq " + mFragmentList.size());
         FragmentManager fragmentManager = ((FragmentActivity) mContext).getSupportFragmentManager();
         MyPagerAdapter myPagerAdapter = new MyPagerAdapter(fragmentManager, mFragmentList);
         holder.mViewPager.setAdapter(myPagerAdapter);
         holder.mTabLayout.setupWithViewPager(holder.mViewPager, true);
-
+        */
 
         holder.mDate.setText(post.getTime() + " & " + post.getDate());
         holder.mCommentNumber.setText("" + post.getCommentList().size());
@@ -151,5 +150,4 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostsViewHol
             mDate = itemView.findViewById(R.id.cardview_home_post_date);
         }
     }
-
 }

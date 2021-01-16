@@ -3,6 +3,7 @@ package com.example.myapplicationinst;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,16 +16,15 @@ import androidx.fragment.app.Fragment;
 import com.example.myapplicationinst.util.ImageViewPager;
 
 public class ViewPagerItemFragment extends Fragment {
-    private ImageView imageView;
+    private static final String TAG = "ViewPagerItemFragment";
 
+    private ImageView imageView;
 
     private ImageViewPager mImageViewPager;
 
-    public static ViewPagerItemFragment getInstance(ImageViewPager imageViewPager)
-    {
+    public static ViewPagerItemFragment getInstance(ImageViewPager imageViewPager) {
         ViewPagerItemFragment fragment = new ViewPagerItemFragment();
-        if(imageViewPager!=null)
-        {
+        if (imageViewPager != null) {
             Bundle bundle = new Bundle();
             bundle.putParcelable("image",imageViewPager);
             fragment.setArguments(bundle);
@@ -54,9 +54,14 @@ public class ViewPagerItemFragment extends Fragment {
     }
 
     private void init() {
+        Log.d(TAG, "onBindViewHolder: qqqqqq " + mImageViewPager.getImgaeSrc());
         Bitmap bitmap = BitmapFactory.decodeFile(mImageViewPager.getImgaeSrc());
+        Log.d(TAG, "onBindViewHolder: qqqqqq " + bitmap);
         imageView.setImageBitmap(bitmap);
+
+        /*Picasso
+                .with(getActivity())
+                .load(mImageViewPager.getImgaeSrc())
+                .into(imageView);*/
     }
-
-
 }

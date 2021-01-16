@@ -1,13 +1,12 @@
 package com.example.myapplicationinst.model;
 
-import com.example.myapplicationinst.util.ImageViewPager;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class Post {
+
     private String userId;
-    private List<ImageViewPager> imageViewPagers;
+    private List<UriString> imageList;
     private String date;
     private String time;
     private String description;
@@ -17,14 +16,14 @@ public class Post {
     public Post() {
     }
 
-    public Post(String userId, List<ImageViewPager> imageViewPagers, String date, String time, String description) {
+    public Post(String userId, List<UriString> uriStrings, String date, String time, String description) {
         this.userId = userId;
-        this.imageViewPagers = imageViewPagers;
         this.date = date;
         this.time = time;
         this.description = description;
         likeList = new ArrayList<>();
         commentList = new ArrayList<>();
+        imageList = uriStrings;
     }
 
     public String getUserId() {
@@ -35,12 +34,12 @@ public class Post {
         this.userId = userId;
     }
 
-    public List<ImageViewPager> getImageViewPagers() {
-        return imageViewPagers;
+    public List<UriString> getImageViewPagers() {
+        return imageList;
     }
 
-    public void setImageViewPagers(List<ImageViewPager> imageViewPagers) {
-        this.imageViewPagers = imageViewPagers;
+    public void setImageViewPagers(List<UriString> imageViewPagers) {
+        this.imageList = imageList;
     }
 
     public String getDate() {

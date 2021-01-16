@@ -193,6 +193,7 @@ public class SigninActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == IMAGE_PICK && resultCode == RESULT_OK && data != null && data.getData() != null) {
             vImageUri = data.getData();
+            Log.d(TAG, "onActivityResult: 123456789 "+vImageUri);
             Picasso.with(SigninActivity.this).load(vImageUri).into(mImageView);
         }
     }
