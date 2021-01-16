@@ -36,4 +36,8 @@ public class UserPostFragmentSelerization implements Parcelable {
     public int describeContents() {
         return 0;
     }
+
+    public List<Post> getPostList() {
+        return postList;
+    }
 }

@@ -10,7 +10,13 @@ import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.myapplicationinst.adapter.PostsAdapter;
+import com.example.myapplicationinst.model.Post;
+
+import java.util.List;
 
 
 public class UserPostFragment extends Fragment {
@@ -23,7 +29,6 @@ public class UserPostFragment extends Fragment {
     private ImageView mBackPress;
 
     public UserPostFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -38,7 +43,14 @@ public class UserPostFragment extends Fragment {
         ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
         ((AppCompatActivity) getActivity()).setTitle("");
 
-
+        if (getArguments() != null) {
+            List<Post> userPosts = UserPostFragmentArgs.fromBundle(getArguments()).getUserPosts().getPostList();
+            Log.d(TAG, "onCreateView: **** "+userPosts.size());
+            PostsAdapter postsAdapter = new PostsAdapter(userPosts,getActivity());
+            mRecyclerView.setHasFixedSize(true);
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),RecyclerView.VERTICAL,false));
+            mRecyclerView.setAdapter(postsAdapter);
+        }
 
         return view;
     }
