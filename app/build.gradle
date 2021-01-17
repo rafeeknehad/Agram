@@ -53,6 +53,10 @@ dependencies {
 
     //picasso
     implementation 'com.squareup.picasso:picasso:2.5.2'
+    def glide_version = "4.11.0"
+    //Glide // Glide dependency
+    implementation "com.github.bumptech.glide:glide:$glide_version"
+    annotationProcessor "com.github.bumptech.glide:compiler:$glide_version"
 
     //facebook
     implementation 'com.facebook.android:facebook-android-sdk:[5,6)'

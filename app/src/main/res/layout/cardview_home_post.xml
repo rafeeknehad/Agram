@@ -57,6 +57,7 @@
             android:id="@+id/cardview_home_post_viewPager"
             android:layout_width="match_parent"
             android:layout_height="300dp"
+            app:layout_constraintBottom_toTopOf="@id/cardview_home_post_relativelayout1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cardview_home_post_relativelayout" />

@@ -40,26 +40,15 @@ public class UserPostFragment extends Fragment {
         mToolbar = view.findViewById(R.id.fragment_user_post_toolbar);
         mRecyclerView = view.findViewById(R.id.fragment_user_post_recyclerview);
         mBackPress = view.findViewById(R.id.fragment_user_post_back_arrow);
-        Log.d(TAG, "onCreateView: **** ");
         ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
         ((AppCompatActivity) getActivity()).setTitle("");
 
         if (getArguments() != null) {
-            /*List<Post> userPosts = UserPostFragmentArgs.fromBundle(getArguments()).getUserPosts().getPostList();
-            for (Post post : userPosts)
-            {
-                Log.d(TAG, "onCreateView: 999999999999999 "+post.getImageViewPagers().size());
-                for (ImageViewPager imageViewPager : post.getImageViewPagers())
-                {
-                    Log.d(TAG, "onCreateView: 9999999999999 "+imageViewPager.getImgaeSrc());
-                }
-                Log.d(TAG, "onCreateView: 99999999999999999999999");
-            }
-            Log.d(TAG, "onCreateView: **** "+userPosts.size());
+            List<Post> userPosts = UserPostFragmentArgs.fromBundle(getArguments()).getUserPosts().getPostList();
             PostsAdapter postsAdapter = new PostsAdapter(userPosts,getActivity());
             mRecyclerView.setHasFixedSize(true);
             mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),RecyclerView.VERTICAL,false));
-            mRecyclerView.setAdapter(postsAdapter);*/
+            mRecyclerView.setAdapter(postsAdapter);
         }
 
         return view;

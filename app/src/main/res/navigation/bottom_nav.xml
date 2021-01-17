@@ -40,6 +40,10 @@
         <action
             android:id="@+id/action_postFragment_to_addPhotoFragment"
             app:destination="@id/addPhotoFragment" />
+        <argument
+            android:name="userPost"
+            app:argType="integer"
+            android:defaultValue="0" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"

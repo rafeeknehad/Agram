@@ -6,7 +6,7 @@ import java.util.List;
 public class Post {
 
     private String userId;
-    private List<UriString> imageList;
+    private List<String> imageList;
     private String date;
     private String time;
     private String description;
@@ -16,14 +16,14 @@ public class Post {
     public Post() {
     }
 
-    public Post(String userId, List<UriString> uriStrings, String date, String time, String description) {
+    public Post(String userId, List<String> imageList, String date, String time, String description) {
         this.userId = userId;
         this.date = date;
         this.time = time;
         this.description = description;
         likeList = new ArrayList<>();
         commentList = new ArrayList<>();
-        imageList = uriStrings;
+        this.imageList = imageList;
     }
 
     public String getUserId() {
@@ -34,11 +34,11 @@ public class Post {
         this.userId = userId;
     }
 
-    public List<UriString> getImageViewPagers() {
+    public List<String> getImageList() {
         return imageList;
     }
 
-    public void setImageViewPagers(List<UriString> imageViewPagers) {
+    public void setImageList(List<String> imageList) {
         this.imageList = imageList;
     }
 

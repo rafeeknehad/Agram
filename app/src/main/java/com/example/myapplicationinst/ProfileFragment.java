@@ -55,12 +55,10 @@ public class ProfileFragment extends Fragment {
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity) getActivity()).setTitle("");
 
-
         mProfileFragmentModel = ViewModelProviders.of(this).get(ProfileFragmentModel.class);
         mProfileFragmentModel.getData().observe(getViewLifecycleOwner(), new Observer<List<Post>>() {
             @Override
             public void onChanged(List<Post> posts) {
-                Log.d(TAG, "onChanged: " + posts.size());
                 mPostList = posts;
                 initComponent(posts);
             }
@@ -69,16 +67,16 @@ public class ProfileFragment extends Fragment {
         return view;
     }
 
-    private void initComponent(List<Post> posts) {
+    private void initComponent(final List<Post> posts) {
         mProfileFragmentAdapter = new ProfileFragmentAdapter(posts, getActivity());
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2, RecyclerView.VERTICAL, false));
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(mProfileFragmentAdapter);
+
         mProfileFragmentAdapter.setInteface(new ProfileFragmentAdapter.InterfaceProfileFragment() {
             @Override
             public void getSelectedItem(int pos, Post post) {
-                Log.d(TAG, "getSelectedItem: **** " + pos + " " + post.getDate());
-                UserPostFragmentSelerization selerization = new UserPostFragmentSelerization(mPostList);
+                UserPostFragmentSelerization selerization = new UserPostFragmentSelerization(posts);
                 Navigation.findNavController(getView()).navigate(ProfileFragmentDirections.actionProfileFragmentToUserPostFragment(selerization));
             }
         });

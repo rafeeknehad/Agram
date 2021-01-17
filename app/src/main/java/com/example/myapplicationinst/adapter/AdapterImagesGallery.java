@@ -24,7 +24,6 @@ public class AdapterImagesGallery extends RecyclerView.Adapter<AdapterImagesGall
     private AdapterImageGalleryInterface vListener;
 
     public AdapterImagesGallery(List<String> vDataList, Context vContext) {
-        Log.d(TAG, "AdapterImagesGallery: ****" + vDataList.size());
         this.vDataList = vDataList;
         this.vContext = vContext;
     }
@@ -45,7 +44,6 @@ public class AdapterImagesGallery extends RecyclerView.Adapter<AdapterImagesGall
 
     @Override
     public int getItemCount() {
-        Log.d(TAG, "getItemCount: **** " + vDataList.size());
         return vDataList.size();
     }
 

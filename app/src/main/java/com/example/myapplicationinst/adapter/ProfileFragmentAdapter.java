@@ -1,8 +1,8 @@
 package com.example.myapplicationinst.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +13,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplicationinst.R;
 import com.example.myapplicationinst.model.Post;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 public class ProfileFragmentAdapter extends RecyclerView.Adapter<ProfileFragmentAdapter.ProfileFragmentViewHolder> {
+
+    private static final String TAG = "ProfileFragmentAdapter";
 
     private List<Post> mPostList;
     private Context mContext;
@@ -37,8 +40,10 @@ public class ProfileFragmentAdapter extends RecyclerView.Adapter<ProfileFragment
     @Override
     public void onBindViewHolder(@NonNull ProfileFragmentViewHolder holder, int position) {
         Post post = mPostList.get(position);
-        //Bitmap bitmap = BitmapFactory.decodeFile(post.getImageViewPagers().get(0).getImgaeSrc());
-        //holder.imageView.setImageBitmap(bitmap);
+        Picasso
+                .with(mContext)
+                .load(Uri.parse(post.getImageList().get(0)))
+                .into(holder.imageView);
     }
 
     @Override

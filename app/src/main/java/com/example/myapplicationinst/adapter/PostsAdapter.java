@@ -10,17 +10,13 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.borjabravo.readmoretextview.ReadMoreTextView;
 import com.example.myapplicationinst.R;
-import com.example.myapplicationinst.ViewPagerItemFragment;
 import com.example.myapplicationinst.model.Post;
 import com.example.myapplicationinst.model.User;
-import com.example.myapplicationinst.util.ImageViewPager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
@@ -73,7 +69,6 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostsViewHol
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            Log.d(TAG, "onComplete: **** success");
                             for (QueryDocumentSnapshot snapshot : task.getResult()) {
                                 mUser = snapshot.toObject(User.class);
                                 Picasso
@@ -90,23 +85,21 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostsViewHol
                 });
 
 
-        /*Log.d(TAG, "onBindViewHolder: qqqqqq " + post.getImageViewPagers().size());
-        for (ImageViewPager imageViewPager : post.getImageViewPagers()) {
-            ViewPagerItemFragment viewPagerItemFragment = ViewPagerItemFragment.getInstance(imageViewPager);
-            mFragmentList.add(viewPagerItemFragment);
-        }
-        Log.d(TAG, "onBindViewHolder: qqqqqq " + mFragmentList.size());
-        FragmentManager fragmentManager = ((FragmentActivity) mContext).getSupportFragmentManager();
-        MyPagerAdapter myPagerAdapter = new MyPagerAdapter(fragmentManager, mFragmentList);
+        /*for (String imageViewPager : post.getImageList()) {
+            //ViewPagerItemFragment viewPagerItemFragment = ViewPagerItemFragment.getInstance(new ImageViewPager(imageViewPager));
+            //mFragmentList.add(new ImageViewPager(imageViewPager));
+        }*/
+        Log.d(TAG, "onBindViewHolder: ---- "+post.getImageList());
+        MyPagerAdapter myPagerAdapter = new MyPagerAdapter(post.getImageList(), mContext,"Url");
         holder.mViewPager.setAdapter(myPagerAdapter);
+
         holder.mTabLayout.setupWithViewPager(holder.mViewPager, true);
-        */
+
 
         holder.mDate.setText(post.getTime() + " & " + post.getDate());
         holder.mCommentNumber.setText("" + post.getCommentList().size());
         holder.mLikePost.setText("" + post.getLikeList().size());
         holder.mDescription.setText(post.getDescription());
-
     }
 
     @Override

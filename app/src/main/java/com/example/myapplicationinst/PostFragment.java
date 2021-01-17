@@ -2,8 +2,6 @@ package com.example.myapplicationinst;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,15 +15,15 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.myapplicationinst.adapter.MyPagerAdapter;
 import com.example.myapplicationinst.model.Post;
-import com.example.myapplicationinst.model.UriString;
 import com.example.myapplicationinst.util.ImageViewPager;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -51,7 +49,7 @@ public class PostFragment extends Fragment {
     //variable
     private List<ImageViewPager> fragmentList;
     StorageReference firebaseStorage;
-    private List<UriString> mImageUris;
+    private List<String> mImageUris;
     private String time;
     private String date;
 
@@ -62,6 +60,10 @@ public class PostFragment extends Fragment {
     private int counter;
     private StorageReference mStorageRef;
     private LoadingDialog loadingDialog;
+    private int userPost;
+    private int nambarOfImage;
+
+    private Boolean confirmUpload = false;
 
     public PostFragment() {
         // Required empty public constructor
@@ -73,7 +75,8 @@ public class PostFragment extends Fragment {
         // Inflate the layout for this fragment
 
         View view = inflater.inflate(R.layout.fragment_post, container, false);
-
+        counter = 0;
+        nambarOfImage = 0;
         loadingDialog = new LoadingDialog(getActivity());
         mImageUris = new ArrayList<>();
         mStorageRef = FirebaseStorage.getInstance().getReference(firebaseAuth.getCurrentUser().getUid());
@@ -86,6 +89,8 @@ public class PostFragment extends Fragment {
 
         if (getArguments() != null) {
             fragmentList = PostFragmentArgs.fromBundle(getArguments()).getImagePost().getImageViewPagers();
+            userPost = PostFragmentArgs.fromBundle(getArguments()).getUserPost();
+            uploadImageToFirestorageFun();
             initPostFun();
         }
 
@@ -99,55 +104,59 @@ public class PostFragment extends Fragment {
         return view;
     }
 
+    private void uploadImageToFirestorageFun() {
+        firebaseStorage = mStorageRef.child("Posts").child("Post" + String.valueOf(userPost + 1));
+        for (ImageViewPager imageViewPager : fragmentList) {
+            nambarOfImage++;
+            Uri uri = Uri.fromFile(new File(imageViewPager.getImgaeSrc()));
+            firebaseStorage = firebaseStorage.
+                    child(System.currentTimeMillis() + ".");
+            firebaseStorage.putFile(uri)
+                    .addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                            task.getResult().getStorage().getDownloadUrl()
+                                    .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                        @Override
+                                        public void onSuccess(Uri uri) {
+                                            mImageUris.add(uri.toString());
+                                            if (mImageUris.size() == fragmentList.size()) {
+                                                confirmPostFun();
+                                            }
+                                        }
+                                    });
+                        }
+                    });
+        }
+    }
+
     private void addPostFun() {
-        counter = 0;
         loadingDialog.loadingDailog();
-        Log.d(TAG, "addPostFun: 123456789 ");
         Date currentTime = Calendar.getInstance().getTime();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm:ss a");
         time = simpleDateFormat.format(currentTime.getTime());
         date = DateFormat.getDateInstance(DateFormat.FULL).format(currentTime);
-        firebaseFirestore.collection("Post")
-                .document(firebaseAuth.getCurrentUser().getUid())
-                .collection("Posts")
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        firebaseStorage = mStorageRef.child("Posts").child(String.valueOf(queryDocumentSnapshots.size() + 1));
-                    }
-                });
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                setData();
-            }
-        }, 5000);
-
     }
 
     private void initPostFun() {
-        List<Fragment> mFragmentList = new ArrayList<>();
+        List<String> stingArrayList = new ArrayList<>();
         for (ImageViewPager imageViewPager : fragmentList) {
             ViewPagerItemFragment viewPagerItemFragment = ViewPagerItemFragment.getInstance(imageViewPager);
-            mFragmentList.add(viewPagerItemFragment);
+            stingArrayList.add(imageViewPager.getImgaeSrc());
         }
-        MyPagerAdapter myPagerAdapter = new MyPagerAdapter(getActivity().getSupportFragmentManager(), mFragmentList);
+        MyPagerAdapter myPagerAdapter = new MyPagerAdapter(stingArrayList, getActivity(), "Decode");
         mViewPager.setAdapter(myPagerAdapter);
-        Log.d(TAG, "onCreateView: " + getActivity().getString(R.string.logd) + " hello");
         mTabLayout.setupWithViewPager(mViewPager, true);
-        Log.d(TAG, "onCreateView: " + getActivity().getString(R.string.logd) + "  " + fragmentList.size());
     }
 
     private void confirmPostFun() {
-        Log.d(TAG, "confirmPostFun: 123456789 1");
+        loadingDialog.dismissDialog();
+
         Post post = new Post(firebaseAuth.getCurrentUser().getUid(),
                 mImageUris,
                 date,
                 time,
                 mEditText.getText().toString().trim());
-        Log.d(TAG, "confirmPostFun: 123456789 2");
 
         firebaseFirestore.collection("Post")
                 .document(firebaseAuth.getCurrentUser().getUid())
@@ -156,53 +165,12 @@ public class PostFragment extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "onSuccess: 123456789 " + documentReference.getId());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "onFailure: 123456789 " + e.getMessage());
                     }
                 });
-    }
-
-    private void setData() {
-        for (ImageViewPager imageViewPager : fragmentList) {
-            Uri uri = Uri.fromFile(new File(imageViewPager.getImgaeSrc()));
-            firebaseStorage = firebaseStorage.child(System.currentTimeMillis() + "");
-            firebaseStorage.putFile(uri)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            firebaseStorage.getDownloadUrl()
-                                    .addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                        @Override
-                                        public void onSuccess(Uri uri) {
-                                            Log.d(TAG, "onSuccess: 123456789 uri " + uri);
-                                            mImageUris.add(new UriString(uri.toString()));
-                                            counter++;
-                                            if (counter == fragmentList.size()) {
-                                                confirmPostFun();
-                                                loadingDialog.dismissDialog();
-                                            }
-                                        }
-                                    })
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Log.d(TAG, "onFailure: 123456789 " + e.getMessage());
-                                        }
-                                    });
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.d(TAG, "onFailure: 123456789");
-                        }
-                    });
-
-        }
     }
 }

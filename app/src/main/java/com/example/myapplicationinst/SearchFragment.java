@@ -63,7 +63,6 @@ public class SearchFragment extends Fragment {
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),RecyclerView.VERTICAL,false));
                 recyclerView.setHasFixedSize(true);
                 recyclerView.setAdapter(searchFragmentAdapter);
-                Log.d(TAG, "onChanged: " + getActivity().getString(R.string.logd) + " " + users.size());
             }
         });
 
@@ -90,13 +89,11 @@ public class SearchFragment extends Fragment {
 
                     @Override
                     public boolean onQueryTextChange(String newText) {
-                        Log.d(TAG, "onQueryTextChange: "+getActivity().getString(R.string.logd)+" "+newText);
                         searchFragmentAdapter.getFilter().filter(newText);
                         searchFragmentAdapter.notifyDataSetChanged();
                         return true;
                     }
                 });
-                Log.d(TAG, "onOptionsItemSelected: " + getActivity().getString(R.string.logd) + " " + "Clicked");
                 return true;
         }
         return false;

@@ -106,7 +106,6 @@ public class SigninActivity extends AppCompatActivity {
                     } catch (FirebaseAuthUserCollisionException existEmail) {
                         Toast.makeText(SigninActivity.this, "The Mail is exist", Toast.LENGTH_SHORT).show();
                     } catch (Exception e) {
-                        Log.d(TAG, "onComplete: *** " + e.getMessage());
                     }
                 } else {
                     final User newUser = new User(vUserNameTxt, vPassTxt, vSelectGender.getText().toString(),
@@ -177,7 +176,6 @@ public class SigninActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "onSuccess: **** " + documentReference.getId());
                     }
                 });
     }
@@ -193,7 +191,6 @@ public class SigninActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == IMAGE_PICK && resultCode == RESULT_OK && data != null && data.getData() != null) {
             vImageUri = data.getData();
-            Log.d(TAG, "onActivityResult: 123456789 "+vImageUri);
             Picasso.with(SigninActivity.this).load(vImageUri).into(mImageView);
         }
     }

@@ -1,35 +1,80 @@
 package com.example.myapplicationinst.adapter;
 
-import android.util.Log;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
-import java.util.ArrayList;
+import com.example.myapplicationinst.R;
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
-public class MyPagerAdapter extends FragmentStatePagerAdapter {
+public class MyPagerAdapter extends PagerAdapter {
 
-    private static final String TAG = "MyPagerAdapter";
-    private List<Fragment> fragments = new ArrayList<>();
+    private List<String> imageViewPagers;
+    private Context mContext;
+    private String mFrom;
+    private ImageView mImageView;
 
-    public MyPagerAdapter(@NonNull FragmentManager fm, List<Fragment> fragments) {
-        super(fm);
-        this.fragments = fragments;
-        Log.d(TAG, "MyPagerAdapter: **** "+fragments.size());
-    }
-
-    @NonNull
-    @Override
-    public Fragment getItem(int position) {
-        return fragments.get(position);
+    public MyPagerAdapter(List<String> imageViewPagers, Context mContext, String from) {
+        this.imageViewPagers = imageViewPagers;
+        this.mContext = mContext;
+        mFrom = from;
     }
 
     @Override
     public int getCount() {
-        Log.d(TAG, "getCount: ***** "+fragments.size());
-        return fragments.size();
+        return imageViewPagers.size();
+    }
+
+    @Override
+    public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
+        return view.equals(object);
+    }
+
+    @NonNull
+    @Override
+    public Object instantiateItem(@NonNull ViewGroup container, int position) {
+        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(
+                Context.LAYOUT_INFLATER_SERVICE
+        );
+        View view = inflater.inflate(R.layout.fragment_viewpager_item, null);
+        mImageView = view.findViewById(R.id.fragment_image);
+        String path = imageViewPagers.get(position);
+        if (mFrom.equals("Url")) {
+            urlFun(path);
+        } else if (mFrom.equals("Decode")) {
+            decodeFun(path);
+        }
+        ViewPager viewPager = (ViewPager) container;
+        viewPager.addView(view, 0);
+        return view;
+    }
+
+    private void urlFun(String path) {
+        Picasso
+                .with(mContext)
+                .load(path)
+                .into(mImageView);
+    }
+
+    private void decodeFun(String path) {
+        Bitmap bitmap = BitmapFactory.decodeFile(path);
+        mImageView.setImageBitmap(bitmap);
+    }
+
+    @Override
+    public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+        ViewPager viewPager = (ViewPager) container;
+        View view = (View) object;
+        viewPager.removeView(view);
     }
 }

@@ -79,7 +79,6 @@ public class SearchFragmentAdapter extends RecyclerView.Adapter<SearchFragmentAd
                     }
                 }
                 FilterResults filterResults = new FilterResults();
-                Log.d(TAG, "performFiltering: **** "+filterList);
                 filterResults.values = filterList;
                 return filterResults;
             }
@@ -87,7 +86,6 @@ public class SearchFragmentAdapter extends RecyclerView.Adapter<SearchFragmentAd
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 mAlUserList.clear();
-                Log.d(TAG, "publishResults: **** "+results.values);
                 mAlUserList.addAll((List) results.values);
             }
         };

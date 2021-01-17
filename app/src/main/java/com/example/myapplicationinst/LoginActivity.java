@@ -97,18 +97,15 @@ public class LoginActivity extends AppCompatActivity {
         mFacebookLogin.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Log.d(TAG, "onSuccess: ssss ");
                 getFaceBookDetails(loginResult);
             }
 
             @Override
             public void onCancel() {
-                Log.d(TAG, "onCancel: ssss");
             }
 
             @Override
             public void onError(FacebookException error) {
-                Log.d(TAG, "onError: ssss " + error.getMessage());
             }
         });
 
@@ -163,7 +160,6 @@ public class LoginActivity extends AppCompatActivity {
                         try {
                             String email = object.getString("email");
                         } catch (JSONException e) {
-                            Log.d(TAG, "onCompleted: ****** ");
                             e.printStackTrace();
                         }
                     }
@@ -201,7 +197,6 @@ public class LoginActivity extends AppCompatActivity {
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            Log.d(TAG, "onComplete: **** forgetpassword");
                         }
                     });
         }
@@ -227,7 +222,6 @@ public class LoginActivity extends AppCompatActivity {
             for (Signature signature : info.signatures) {
                 MessageDigest md = MessageDigest.getInstance("SHA");
                 md.update(signature.toByteArray());
-                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
             }
         } catch (PackageManager.NameNotFoundException e) {
             Log.e("KeyHash:", e.toString());

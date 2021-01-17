@@ -40,6 +40,7 @@ public class ProfileFragmentModel extends AndroidViewModel {
     public LiveData<List<Post>> getData() {
         mMutableLiveData = new MutableLiveData<>();
         mPostList = new ArrayList<>();
+        Log.d(TAG, "getData: 123456789 hello");
         Log.d(TAG, "getData: **** " + firebaseAuth.getCurrentUser().getUid());
         firebaseFirestore.collection("Post")
                 .document(firebaseAuth.getCurrentUser().getUid())
@@ -50,8 +51,12 @@ public class ProfileFragmentModel extends AndroidViewModel {
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             Post post = documentSnapshot.toObject(Post.class);
+                            Log.d(TAG, "onSuccess: 123456789 " + post.getDescription());
+                            Log.d(TAG, "onSuccess: 123456789 " + post.getImageList());
+                            Log.d(TAG, "onSuccess: 123456789 " + post);
                             mPostList.add(post);
                         }
+                        Log.d(TAG, "onSuccess: 123456789 " + mPostList.size());
                         mMutableLiveData.setValue(mPostList);
                     }
                 })

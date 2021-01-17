@@ -3,6 +3,9 @@ package com.example.myapplicationinst.util;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+
+
 public class ImageViewPager implements Parcelable {
 
     private String imgaeSrc;
@@ -29,6 +32,8 @@ public class ImageViewPager implements Parcelable {
             return new ImageViewPager[size];
         }
     };
+
+
 
     public String getImgaeSrc() {
         return imgaeSrc;
