@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -27,6 +26,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 public class SigninActivity extends AppCompatActivity {
@@ -60,11 +62,15 @@ public class SigninActivity extends AppCompatActivity {
     //firebase
     private FirebaseAuth vFirebaseAuth = FirebaseAuth.getInstance();
     private FirebaseFirestore vFirebaseFirestore = FirebaseFirestore.getInstance();
+    private StorageReference mStorageRef;
+    private StorageReference firebaseStorage;
+    private Uri mUserImageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+        mStorageRef = FirebaseStorage.getInstance().getReference("User Image");
         initComponent();
         mSinginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,15 +114,18 @@ public class SigninActivity extends AppCompatActivity {
                     } catch (Exception e) {
                     }
                 } else {
-                    final User newUser = new User(vUserNameTxt, vPassTxt, vSelectGender.getText().toString(),
-                            vImageUri.toString(), vAboutTxt);
+                    Toast.makeText(SigninActivity.this, "User Add", Toast.LENGTH_SHORT).show();
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
+                            User newUser = new User(vUserNameTxt, vPassTxt, vSelectGender.getText().toString(),
+                                    mUserImageUri.toString(), vAboutTxt);
                             newUser.setUserId(vFirebaseAuth.getUid());
                             addNewUser(newUser);
                         }
                     }, 5000);
+                    Intent intent = new Intent(SigninActivity.this, LoginActivity.class);
+                    startActivity(intent);
                 }
             }
         });
@@ -191,6 +200,23 @@ public class SigninActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == IMAGE_PICK && resultCode == RESULT_OK && data != null && data.getData() != null) {
             vImageUri = data.getData();
+            firebaseStorage = mStorageRef.child("Image");
+            firebaseStorage = firebaseStorage
+                    .child(System.currentTimeMillis() + "");
+
+            firebaseStorage.putFile(vImageUri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            firebaseStorage.getDownloadUrl().
+                                    addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                        @Override
+                                        public void onSuccess(Uri uri) {
+                                            mUserImageUri = uri;
+                                        }
+                                    });
+                        }
+                    });
             Picasso.with(SigninActivity.this).load(vImageUri).into(mImageView);
         }
     }

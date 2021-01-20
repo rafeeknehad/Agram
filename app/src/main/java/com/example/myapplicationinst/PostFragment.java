@@ -48,7 +48,6 @@ public class PostFragment extends Fragment {
 
     //variable
     private List<ImageViewPager> fragmentList;
-    StorageReference firebaseStorage;
     private List<String> mImageUris;
     private String time;
     private String date;
@@ -59,6 +58,7 @@ public class PostFragment extends Fragment {
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private int counter;
     private StorageReference mStorageRef;
+    private StorageReference firebaseStorage;
     private LoadingDialog loadingDialog;
     private int userPost;
     private int nambarOfImage;

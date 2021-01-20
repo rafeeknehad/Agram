@@ -16,14 +16,19 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplicationinst.adapter.SearchFragmentAdapter;
 import com.example.myapplicationinst.model.User;
 import com.example.myapplicationinst.modelclass.SearchFragmentModel;
+import com.example.myapplicationinst.util.SearchToUserProfileFragmentArg;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.myapplicationinst.adapter.SearchFragmentAdapter.SearchFragmentInterface;
 
 public class SearchFragment extends Fragment {
 
@@ -39,6 +44,12 @@ public class SearchFragment extends Fragment {
     //adapter
     private SearchFragmentAdapter searchFragmentAdapter;
 
+    //list
+    private List<User> allUser;
+    private List<User> seacrhUser;
+    private User mCurrentUser;
+    private String currentUser;
+    private List<String> searchUserId;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -56,17 +67,45 @@ public class SearchFragment extends Fragment {
         setHasOptionsMenu(true);
         searchFragmentModel = ViewModelProviders.of(this).get(SearchFragmentModel.class);
 
+        allUser = new ArrayList<>();
+        seacrhUser = new ArrayList<>();
+        searchFragmentAdapter = new SearchFragmentAdapter(allUser, getActivity());
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setAdapter(searchFragmentAdapter);
+
+
+        System.out.println("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
         searchFragmentModel.getAllUserForServer().observe(getViewLifecycleOwner(), new Observer<List<User>>() {
             @Override
             public void onChanged(List<User> users) {
-                searchFragmentAdapter = new SearchFragmentAdapter(users,getActivity());
-                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),RecyclerView.VERTICAL,false));
-                recyclerView.setHasFixedSize(true);
-                recyclerView.setAdapter(searchFragmentAdapter);
+                searchFragmentAdapter.setData(seacrhUser, users);
             }
         });
 
+        searchFragmentAdapter.setSearchFragmentInterface(new SearchFragmentInterface() {
+            @Override
+            public void getPosition(int pos, User user) {
+                Log.d(TAG, "getPosition: ---- " + pos + " " + user);
+                SearchToUserProfileFragmentArg arg = new SearchToUserProfileFragmentArg(user);
+                Navigation.findNavController(getView()).navigate(SearchFragmentDirections.actionSearchFragmentToUserProfile
+                        (arg));
+            }
+        });
         return view;
+    }
+
+    private void setDataForAdapter(List<User> users) {
+        System.out.println("qqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
+        for (String item : mCurrentUser.getSearchingList()) {
+            for (User user : users) {
+                if (item.equals(user.getUserKey())) {
+                    seacrhUser.add(user);
+                    break;
+                }
+            }
+        }
+        searchFragmentAdapter.setData(seacrhUser, users);
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.example.myapplicationinst.model;
 
+import com.google.firebase.firestore.Exclude;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +15,10 @@ public class User {
     private List<String> follewers;
     private List<String> followings;
     private List<String> posts;
+    private String userKey;
+    private List<String> waitList;
+    private List<String> recieveList;
+    private List<String> searchingList;
 
     public User() {
     }
@@ -27,6 +33,34 @@ public class User {
         this.follewers = new ArrayList<>();
         this.followings = new ArrayList<>();
         this.posts = new ArrayList<>();
+        waitList = new ArrayList<>();
+        recieveList = new ArrayList<>();
+        searchingList = new ArrayList<>();
+    }
+
+    public List<String> getSearchingList() {
+        return searchingList;
+    }
+
+    public void setSearchingList(List<String> searchingList) {
+        this.searchingList = searchingList;
+    }
+
+    public List<String> getRecieveList() {
+        return recieveList;
+    }
+
+    public void setRecieveList(List<String> recieveList) {
+        this.recieveList = recieveList;
+    }
+
+    @Exclude
+    public String getUserKey() {
+        return userKey;
+    }
+
+    public void setUserKey(String userKey) {
+        this.userKey = userKey;
     }
 
     public String getUserId() {
@@ -99,5 +133,13 @@ public class User {
 
     public void setPosts(List<String> posts) {
         this.posts = posts;
+    }
+
+    public List<String> getWaitList() {
+        return waitList;
+    }
+
+    public void setWaitList(List<String> waitList) {
+        this.waitList = waitList;
     }
 }

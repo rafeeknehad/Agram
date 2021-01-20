@@ -29,13 +29,20 @@ public class SearchFragmentAdapter extends RecyclerView.Adapter<SearchFragmentAd
     private static final String TAG = "SearchFragmentAdapter";
 
     public List<User> mAlUserList;
+    public List<User> mAlUserList1;
     public List<User> mAllUsetListFull;
     public Context mContext;
+
+    public SearchFragmentInterface linsener;
 
     public SearchFragmentAdapter(List<User> mAlUserList, Context mContext) {
         this.mAlUserList = mAlUserList;
         mAllUsetListFull = new ArrayList<>(mAlUserList);
         this.mContext = mContext;
+    }
+
+    public void setSearchFragmentInterface(SearchFragmentInterface linsener) {
+        this.linsener = linsener;
     }
 
     @NonNull
@@ -47,6 +54,7 @@ public class SearchFragmentAdapter extends RecyclerView.Adapter<SearchFragmentAd
 
     @Override
     public void onBindViewHolder(@NonNull SearchFragmntViewHolder holder, int position) {
+        System.out.println("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqww "+position);
         User user = mAlUserList.get(position);
         Uri uri = Uri.parse(user.getUserProfile());
         Picasso.with(mContext)
@@ -69,7 +77,7 @@ public class SearchFragmentAdapter extends RecyclerView.Adapter<SearchFragmentAd
             protected FilterResults performFiltering(CharSequence constraint) {
                 List<User> filterList = new ArrayList<>();
                 if (constraint == null || constraint.length() == 0) {
-                    filterList = mAllUsetListFull;
+                    filterList = mAlUserList1;
                 } else {
                     String subString = constraint.toString().toLowerCase().trim();
                     for (User item : mAllUsetListFull) {
@@ -87,8 +95,13 @@ public class SearchFragmentAdapter extends RecyclerView.Adapter<SearchFragmentAd
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 mAlUserList.clear();
                 mAlUserList.addAll((List) results.values);
+                notifyDataSetChanged();
             }
         };
+    }
+
+    public interface SearchFragmentInterface {
+        public void getPosition(int pos, User user);
     }
 
     public class SearchFragmntViewHolder extends RecyclerView.ViewHolder {
@@ -102,6 +115,25 @@ public class SearchFragmentAdapter extends RecyclerView.Adapter<SearchFragmentAd
             vImageView = itemView.findViewById(R.id.cardview_search_fragment_userprofiel);
             vTextView = itemView.findViewById(R.id.cardview_search_fragment_username);
             vClose = itemView.findViewById(R.id.cardview_search_fragment_delete);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (getAdapterPosition() != RecyclerView.NO_POSITION) {
+                        Log.d(TAG, "onClick: ---- " + getAdapterPosition() + "  " + mAlUserList.get(getAdapterPosition()).getUserName());
+                        linsener.getPosition(getAdapterPosition(), mAlUserList.get(getAdapterPosition()));
+                    }
+                }
+            });
         }
+    }
+
+    public void setData(List<User> data,List<User> allData)
+    {
+        System.out.println("wwwwwwwwwwwwwwwwwwwwwwww");
+        mAllUsetListFull = new ArrayList<>(allData);
+        mAlUserList1 = new ArrayList<>(data);
+        mAlUserList = new ArrayList<>(data);
+        notifyDataSetChanged();
     }
 }
