@@ -28,6 +28,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.myapplicationinst.adapter.AdapterImagesGallery;
 import com.example.myapplicationinst.adapter.MyPagerAdapter;
+import com.example.myapplicationinst.model.User;
 import com.example.myapplicationinst.util.ImageGallery;
 import com.example.myapplicationinst.util.ImageViewPager;
 import com.example.myapplicationinst.util.ImageViewPagerSelerization;
@@ -64,6 +65,7 @@ public class AddPhotoFragment extends Fragment {
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private int userPost;
+    private User mUserInfo;
 
     public AddPhotoFragment() {
     }

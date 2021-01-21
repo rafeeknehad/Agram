@@ -20,12 +20,14 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class FavFragmentAdapter extends RecyclerView.Adapter {
+public class FavFragmentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final String TAG = "FavFragmentAdapter";
 
     private List<Object> mObjectList;
     private Context mContext;
+
+    public FavFragmentInterface mListener;
 
     public FavFragmentAdapter(List<Object> mObjectList, Context mContext) {
         this.mObjectList = mObjectList;
@@ -35,7 +37,7 @@ public class FavFragmentAdapter extends RecyclerView.Adapter {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (this.getItemViewType(viewType) == 1) {
+        if (this.getItemViewType(viewType) == 0) {
             return new RequestFollowingViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_send_request,
                     parent, false));
         } else {
@@ -43,9 +45,14 @@ public class FavFragmentAdapter extends RecyclerView.Adapter {
         }
     }
 
+    public void setFavFragmentIntefrace(FavFragmentInterface listener) {
+        this.mListener = listener;
+    }
+
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if (this.getItemViewType(position) == 1) {
+        Log.d(TAG, "onBindViewHolder: //// " + this.getItemViewType(position));
+        if (this.getItemViewType(position) == 0) {
             User user = (User) mObjectList.get(position);
             RequestFollowingViewHolder viewHolder = (RequestFollowingViewHolder) holder;
             String text = user.getUserName() + " is request to follow";
@@ -63,17 +70,25 @@ public class FavFragmentAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemViewType(int position) {
         //x.class.Isinstace(list.get(position))
+        Log.d(TAG, "getItemViewType: //// size " + mObjectList.size());
         Log.d(TAG, "getItemViewType: //// " + position);
-        if (User.class.isInstance(mObjectList.get(0))) {
-            return 1;
-        } else {
+        if (User.class.isInstance(mObjectList.get(position))) {
             return 0;
+        } else {
+            return 1;
         }
     }
 
     @Override
     public int getItemCount() {
+        Log.d(TAG, "getItemCount: //// " + this.mObjectList.size());
         return this.mObjectList.size();
+    }
+
+    public interface FavFragmentInterface {
+        public void comfirmFollowing(int pos, User user);
+
+        public void deleteFollowing(int pos, User user);
     }
 
     public class RequestFollowingViewHolder extends RecyclerView.ViewHolder {
@@ -89,6 +104,24 @@ public class FavFragmentAdapter extends RecyclerView.Adapter {
             mDelete = itemView.findViewById(R.id.cardview_send_request_delete);
             mImageView = itemView.findViewById(R.id.cardview_send_request_profileuser);
             mUserName = itemView.findViewById(R.id.cardview_send_request_text);
+
+            mConfirm.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mListener != null && getAdapterPosition() != RecyclerView.NO_POSITION) {
+                        mListener.comfirmFollowing(getAdapterPosition(), (User) mObjectList.get(getAdapterPosition()));
+                    }
+                }
+            });
+
+            mDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mListener != null && getAdapterPosition() != RecyclerView.NO_POSITION) {
+                        mListener.deleteFollowing(getAdapterPosition(), (User) mObjectList.get(getAdapterPosition()));
+                    }
+                }
+            });
         }
     }
 
