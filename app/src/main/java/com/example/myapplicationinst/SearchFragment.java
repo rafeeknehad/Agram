@@ -34,22 +34,12 @@ public class SearchFragment extends Fragment {
 
     private static final String TAG = "SearchFragment";
 
-    //view model
-    private SearchFragmentModel searchFragmentModel;
-
-    //ui
-    private Toolbar toolbar;
-    private RecyclerView recyclerView;
-
     //adapter
     private SearchFragmentAdapter searchFragmentAdapter;
 
-    //list
-    private List<User> allUser;
-    private List<User> seacrhUser;
-    private User mCurrentUser;
-    private String currentUser;
-    private List<String> searchUserId;
+    private List<User> searchUser;
+    //private User mCurrentUser;
+    //private String currentUser;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -60,15 +50,20 @@ public class SearchFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_search, container, false);
-        toolbar = view.findViewById(R.id.fragment_search_toolbar);
-        recyclerView = view.findViewById(R.id.fragment_search_recy);
-        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-        ((AppCompatActivity) getActivity()).setTitle("");
-        setHasOptionsMenu(true);
-        searchFragmentModel = ViewModelProviders.of(this).get(SearchFragmentModel.class);
+        //ui
+        Toolbar toolbar = view.findViewById(R.id.fragment_search_toolbar);
+        RecyclerView recyclerView = view.findViewById(R.id.fragment_search_recy);
+        if (getActivity() != null) {
+            ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+            ((AppCompatActivity) getActivity()).setTitle("");
+            setHasOptionsMenu(true);
+        }
+        //view model
+        SearchFragmentModel searchFragmentModel = ViewModelProviders.of(this).get(SearchFragmentModel.class);
 
-        allUser = new ArrayList<>();
-        seacrhUser = new ArrayList<>();
+        //list
+        List<User> allUser = new ArrayList<>();
+        searchUser = new ArrayList<>();
         searchFragmentAdapter = new SearchFragmentAdapter(allUser, getActivity());
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
         recyclerView.setHasFixedSize(true);
@@ -79,7 +74,14 @@ public class SearchFragment extends Fragment {
         searchFragmentModel.getAllUserForServer().observe(getViewLifecycleOwner(), new Observer<List<User>>() {
             @Override
             public void onChanged(List<User> users) {
-                searchFragmentAdapter.setData(seacrhUser, users);
+                Log.d(TAG, "onChanged: <<<<<");
+                for (User user : users) {
+                    if (user.getUserKey().equals(HomeFragment.userInfo.getUserKey())) {
+                        users.remove(user);
+                        break;
+                    }
+                }
+                searchFragmentAdapter.setData(searchUser, users);
             }
         });
 
@@ -88,16 +90,19 @@ public class SearchFragment extends Fragment {
             public void getPosition(int pos, User user) {
                 Log.d(TAG, "getPosition: ---- " + pos + " " + user);
                 SearchToUserProfileFragmentArg arg = new SearchToUserProfileFragmentArg(user);
-                Navigation.findNavController(getView()).navigate(SearchFragmentDirections.actionSearchFragmentToUserProfile
-                        (arg));
+                if (getView() != null) {
+                    Navigation.findNavController(getView()).navigate(SearchFragmentDirections.actionSearchFragmentToUserProfile
+                            (arg));
+                }
             }
         });
         return view;
     }
 
-    private void setDataForAdapter(List<User> users) {
-        System.out.println("qqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
+    /*private void setDataForAdapter(List<User> users) {
         for (String item : mCurrentUser.getSearchingList()) {
+            if (item.equals(HomeFragment.userInfo.getUserKey()))
+                continue;
             for (User user : users) {
                 if (item.equals(user.getUserKey())) {
                     seacrhUser.add(user);
@@ -106,34 +111,35 @@ public class SearchFragment extends Fragment {
             }
         }
         searchFragmentAdapter.setData(seacrhUser, users);
-    }
+    }*/
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        MenuInflater menuInflater = getActivity().getMenuInflater();
-        menuInflater.inflate(R.menu.search_fragment_menu, menu);
+        if (getActivity() != null) {
+            MenuInflater menuInflater = getActivity().getMenuInflater();
+            menuInflater.inflate(R.menu.search_fragment_menu, menu);
+        }
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.search_fragment_menu_search:
-                SearchView searchView = (SearchView) item.getActionView();
-                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                    @Override
-                    public boolean onQueryTextSubmit(String query) {
-                        return false;
-                    }
+        if (item.getItemId() == R.id.search_fragment_menu_search) {
+            SearchView searchView = (SearchView) item.getActionView();
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    return false;
+                }
 
-                    @Override
-                    public boolean onQueryTextChange(String newText) {
-                        searchFragmentAdapter.getFilter().filter(newText);
-                        searchFragmentAdapter.notifyDataSetChanged();
-                        return true;
-                    }
-                });
-                return true;
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    searchFragmentAdapter.getFilter().filter(newText);
+                    searchFragmentAdapter.notifyDataSetChanged();
+                    return true;
+                }
+            });
+            return true;
         }
         return false;
     }

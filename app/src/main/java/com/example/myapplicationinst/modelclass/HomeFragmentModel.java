@@ -27,17 +27,18 @@ public class HomeFragmentModel extends AndroidViewModel {
     private static final String TAG = "HomeFragmentModel";
 
     private List<Post> mPostList;
-    private MutableLiveData<List<String>> mPostLiveData;
+    int counter = 0;
     private List<String> mUserIdList;
-
+    private MutableLiveData<List<Post>> mPostLiveData;
     public HomeFragmentModel(@NonNull Application application) {
         super(application);
         mUserIdList = new ArrayList<>();
         mPostList = new ArrayList<>();
         mPostLiveData = new MutableLiveData<>();
+        counter = 0;
     }
 
-    public LiveData<List<String>> getPostData() {
+    public LiveData<List<Post>> getPostData() {
         Query query = FirebaseFirestore.getInstance()
                 .collection("Users")
                 .whereEqualTo("userId", FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -67,7 +68,7 @@ public class HomeFragmentModel extends AndroidViewModel {
     }
 
     public void getAllPosts() {
-        final List<String> postsList = new ArrayList<>();
+        final List<Post> postsList = new ArrayList<>();
         Log.d(TAG, "getAllPosts: //// " + mUserIdList.size());
         FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
         for (String userId : mUserIdList) {
@@ -81,10 +82,15 @@ public class HomeFragmentModel extends AndroidViewModel {
                         @Override
                         public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                             for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                                postsList.add(documentSnapshot.getId());
-                                Log.d(TAG, "onSuccess: //// " + documentSnapshot.getId());
+                                Post post = documentSnapshot.toObject(Post.class);
+                                post.setPostKey(documentSnapshot.getId());
+                                postsList.add(post);
+                                Log.d(TAG, "onSuccess: ///// " + post.getPostKey());
                             }
-                            mPostLiveData.setValue(postsList);
+                            counter++;
+                            if (counter == mUserIdList.size()) {
+                                mPostLiveData.setValue(postsList);
+                            }
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {

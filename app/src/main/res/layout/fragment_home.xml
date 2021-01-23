@@ -54,6 +54,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/fragment_home_recycler"
         tools:listitem="@layout/cardview_home_post"
         android:layout_width="match_parent"
         android:layout_height="0dp"

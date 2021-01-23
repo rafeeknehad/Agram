@@ -55,6 +55,8 @@ public class ProfileFragment extends Fragment {
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity) getActivity()).setTitle("");
 
+
+
         mProfileFragmentModel = ViewModelProviders.of(this).get(ProfileFragmentModel.class);
         mProfileFragmentModel.getData().observe(getViewLifecycleOwner(), new Observer<List<Post>>() {
             @Override
@@ -76,7 +78,7 @@ public class ProfileFragment extends Fragment {
         mProfileFragmentAdapter.setInteface(new ProfileFragmentAdapter.InterfaceProfileFragment() {
             @Override
             public void getSelectedItem(int pos, Post post) {
-                UserPostFragmentSelerization selerization = new UserPostFragmentSelerization(posts);
+                UserPostFragmentSelerization selerization = new UserPostFragmentSelerization(posts,pos);
                 Navigation.findNavController(getView()).navigate(ProfileFragmentDirections.actionProfileFragmentToUserPostFragment(selerization));
             }
         });

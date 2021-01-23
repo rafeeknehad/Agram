@@ -8,6 +8,8 @@ import com.example.myapplicationinst.model.Post;
 import java.util.List;
 
 public class UserPostFragmentSelerization implements Parcelable {
+
+    private List<Post> postList;
     public static final Creator<UserPostFragmentSelerization> CREATOR = new Creator<UserPostFragmentSelerization>() {
         @Override
         public UserPostFragmentSelerization createFromParcel(Parcel in) {
@@ -19,17 +21,24 @@ public class UserPostFragmentSelerization implements Parcelable {
             return new UserPostFragmentSelerization[size];
         }
     };
-    private List<Post> postList;
+    private int pos;
 
-    public UserPostFragmentSelerization(List<Post> postList) {
+    public UserPostFragmentSelerization(List<Post> postList, int pos) {
         this.postList = postList;
+        this.pos = pos;
     }
 
     protected UserPostFragmentSelerization(Parcel in) {
+        pos = in.readInt();
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
+    public int getPos() {
+        return pos;
+    }
+
+
+    public List<Post> getPostList() {
+        return postList;
     }
 
     @Override
@@ -37,7 +46,8 @@ public class UserPostFragmentSelerization implements Parcelable {
         return 0;
     }
 
-    public List<Post> getPostList() {
-        return postList;
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(pos);
     }
 }

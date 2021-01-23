@@ -10,17 +10,25 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplicationinst.adapter.ProfileFragmentAdapter;
+import com.example.myapplicationinst.model.Post;
 import com.example.myapplicationinst.model.User;
 import com.example.myapplicationinst.modelclass.UserProfileModel;
-import com.google.firebase.auth.FirebaseAuth;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -33,7 +41,6 @@ public class UserProfile extends Fragment {
 
     //firebase
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
     //ui
     private TextView mUserName1;
@@ -47,14 +54,13 @@ public class UserProfile extends Fragment {
     private TextView mNumberFollowing;
     private TextView mNumberFollower;
 
-    //model
-    private UserProfileModel mUserProfileModel;
-
     //dialog
     private LoadingDialog mLoadingDialog;
 
     private User mUser;
-    private User mCurentUser;
+    private User mCurrentUser;
+
+    private List<Post> userPostList;
 
     public UserProfile() {
         // Required empty public constructor
@@ -81,26 +87,16 @@ public class UserProfile extends Fragment {
         if (getArguments() != null) {
             mUser = UserProfileArgs.fromBundle(getArguments()).getSelectedUser().getUser();
         }
-        mUserProfileModel = ViewModelProviders.of(this).get(UserProfileModel.class);
+        //model
+        UserProfileModel mUserProfileModel = ViewModelProviders.of(this).get(UserProfileModel.class);
 
         mUserProfileModel.getUserData().observe(getViewLifecycleOwner(), new Observer<User>() {
             @Override
             public void onChanged(User user) {
                 mLoadingDialog.dismissDialog();
-                mCurentUser = user;
+                mCurrentUser = user;
                 Log.d(TAG, "onChanged: ---- " + user);
                 init();
-            }
-        });
-        mFollowBtn.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("ResourceAsColor")
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "onClick: ---- click");
-                updateUserDataFun();
-
-                mFollowBtn.setBackgroundColor(R.color.black);
-                mFollowBtn.setText("Requested");
             }
         });
         return view;
@@ -109,14 +105,14 @@ public class UserProfile extends Fragment {
     private void updateUserDataFun() {
         HashMap<String, Object> receiveMap = new HashMap<>();
         HashMap<String, Object> waitMap = new HashMap<>();
-        List<String> waitList = mCurentUser.getWaitList();
+        List<String> waitList = mCurrentUser.getWaitList();
         List<String> receiveList = mUser.getRecieveList();
         waitList.add(mUser.getUserKey());
-        receiveList.add(mCurentUser.getUserKey());
+        receiveList.add(mCurrentUser.getUserKey());
         waitMap.put("waitList", waitList);
         receiveMap.put("recieveList", receiveList);
         firebaseFirestore.collection("Users")
-                .document(mCurentUser.getUserKey())
+                .document(mCurrentUser.getUserKey())
                 .update(waitMap);
 
         firebaseFirestore.collection("Users")
@@ -125,6 +121,7 @@ public class UserProfile extends Fragment {
 
     }
 
+    @SuppressLint("SetTextI18n")
     private void init() {
         Picasso
                 .with(getActivity())
@@ -135,5 +132,61 @@ public class UserProfile extends Fragment {
         mUserName1.setText(mUser.getUserName());
         mUserName2.setText(mUser.getUserName());
         mAbout.setText(mUser.getUserAbout());
+        mNumberPost.setText("" + mUser.getPosts().size());
+        mNumberFollowing.setText("" + mUser.getFollowings().size());
+        mNumberFollower.setText("" + mUser.getFollewers().size());
+        if (HomeFragment.userInfo.getWaitList().contains(mUser.getUserKey())) {
+            mFollowBtn.setText("Request");
+            mFollowBtn.setBackgroundColor(getResources().getColor(R.color.darkGray));
+        } else if (HomeFragment.userInfo.getFollowings().contains(mUser.getUserKey()) || HomeFragment.userInfo.getFollewers().contains(mUser.getUserKey())) {
+            mFollowBtn.setText("Following");
+            mFollowBtn.setBackgroundColor(getResources().getColor(R.color.black));
+            mMessageBtn.setVisibility(View.VISIBLE);
+        } else {
+            mFollowBtn.setOnClickListener(new View.OnClickListener() {
+                @SuppressLint("ResourceAsColor")
+                @Override
+                public void onClick(View v) {
+                    Log.d(TAG, "onClick: ---- click");
+                    updateUserDataFun();
+                    mFollowBtn.setBackgroundColor(R.color.black);
+                    mFollowBtn.setText("Requested");
+                }
+            });
+            mMessageBtn.setVisibility(View.GONE);
+        }
+
+        userPostList = new ArrayList<>();
+        FirebaseFirestore.getInstance()
+                .collection("Post")
+                .document(mUser.getUserKey())
+                .collection("Posts")
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
+                            Post post = snapshot.toObject(Post.class);
+                            post.setPostKey(snapshot.getId());
+                            userPostList.add(post);
+                            if (userPostList.size() == mUser.getPosts().size()) {
+                                initAdapter();
+                            }
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                });
+    }
+
+    private void initAdapter() {
+        ProfileFragmentAdapter profileFragmentAdapter = new ProfileFragmentAdapter(userPostList, getActivity());
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2, RecyclerView.VERTICAL, false));
+        mRecyclerView.setAdapter(profileFragmentAdapter);
     }
 }

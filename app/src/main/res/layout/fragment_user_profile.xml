@@ -71,30 +71,33 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:layout_weight="0.6"
                     android:id="@+id/user_fragment_number_posts"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Number"
+                    android:text="0"
                     android:textColor="@android:color/black"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <TextView
+                    android:layout_weight="1"
                     android:id="@+id/user_fragment_number_followers"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10sp"
-                    android:text="Number"
+                    android:text="0"
                     android:textColor="@android:color/black"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <TextView
+                    android:layout_weight="1"
                     android:id="@+id/user_fragment_number_following"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10sp"
-                    android:text="Number"
+                    android:text="0"
                     android:textColor="@android:color/black"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -107,29 +110,33 @@
                 android:layout_marginTop="5dp">
 
                 <TextView
+                    android:layout_weight="1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Posts"
                     android:textColor="@android:color/black"
-                    android:textSize="15dp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <TextView
+                    android:layout_weight="1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10sp"
                     android:text="Followers"
                     android:textColor="@android:color/black"
-                    android:textSize="15dp"
-                    android:textStyle="bold" />
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_marginStart="10sp" />
 
                 <TextView
+                    android:layout_weight="1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10sp"
                     android:text="Following"
                     android:textColor="@android:color/black"
-                    android:textSize="15dp"
+                    android:textSize="20dp"
                     android:textStyle="bold" />
 
             </LinearLayout>

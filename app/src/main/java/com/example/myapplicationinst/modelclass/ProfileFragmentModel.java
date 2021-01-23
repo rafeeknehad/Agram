@@ -8,6 +8,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.myapplicationinst.HomeFragment;
 import com.example.myapplicationinst.model.Post;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -40,10 +41,9 @@ public class ProfileFragmentModel extends AndroidViewModel {
     public LiveData<List<Post>> getData() {
         mMutableLiveData = new MutableLiveData<>();
         mPostList = new ArrayList<>();
-        Log.d(TAG, "getData: 123456789 hello");
-        Log.d(TAG, "getData: **** " + firebaseAuth.getCurrentUser().getUid());
+        Log.d(TAG, "getData: ////// " + HomeFragment.userInfo.getUserKey());
         firebaseFirestore.collection("Post")
-                .document(firebaseAuth.getCurrentUser().getUid())
+                .document(HomeFragment.userInfo.getUserKey())
                 .collection("Posts")
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -51,12 +51,8 @@ public class ProfileFragmentModel extends AndroidViewModel {
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             Post post = documentSnapshot.toObject(Post.class);
-                            Log.d(TAG, "onSuccess: 123456789 " + post.getDescription());
-                            Log.d(TAG, "onSuccess: 123456789 " + post.getImageList());
-                            Log.d(TAG, "onSuccess: 123456789 " + post);
                             mPostList.add(post);
                         }
-                        Log.d(TAG, "onSuccess: 123456789 " + mPostList.size());
                         mMutableLiveData.setValue(mPostList);
                     }
                 })

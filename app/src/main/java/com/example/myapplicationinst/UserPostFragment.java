@@ -45,9 +45,11 @@ public class UserPostFragment extends Fragment {
 
         if (getArguments() != null) {
             List<Post> userPosts = UserPostFragmentArgs.fromBundle(getArguments()).getUserPosts().getPostList();
+            int pos = UserPostFragmentArgs.fromBundle(getArguments()).getUserPosts().getPos();
             PostsAdapter postsAdapter = new PostsAdapter(userPosts,getActivity());
             mRecyclerView.setHasFixedSize(true);
             mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),RecyclerView.VERTICAL,false));
+            mRecyclerView.smoothScrollToPosition(pos);
             mRecyclerView.setAdapter(postsAdapter);
         }
 

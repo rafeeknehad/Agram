@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:padding="10sp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/cardview_like_profileimage"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@mipmap/ic_launcher_round"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/cardview_like_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10sp"
+            android:layout_marginLeft="10sp"
+            android:text="User Profile"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@id/cardview_like_profileimage"
+            app:layout_constraintStart_toEndOf="@id/cardview_like_profileimage"
+            app:layout_constraintTop_toTopOf="@id/cardview_like_profileimage" />
+
+        <Button
+            android:id="@+id/cardview_like_following"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#005DFF"
+            android:text="Follow"
+            android:textColor="@android:color/white"
+            app:layout_constraintBottom_toBottomOf="@id/cardview_like_profileimage"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/cardview_like_profileimage" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
