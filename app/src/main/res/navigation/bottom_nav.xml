@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_homeFragment_to_commentFrgment"
             app:destination="@id/commentFrgment" />
+        <action
+            android:id="@+id/action_homeFragment_to_chatFragment"
+            app:destination="@id/chatFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -81,6 +84,9 @@
         <argument
             android:name="selectedUser"
             app:argType="com.example.myapplicationinst.util.SearchToUserProfileFragmentArg" />
+        <action
+            android:id="@+id/action_userProfile_to_chatBody"
+            app:destination="@id/chatBody" />
     </fragment>
     <fragment
         android:id="@+id/favFragment"
@@ -107,5 +113,23 @@
         <argument
             android:name="post"
             app:argType="com.example.myapplicationinst.util.PostSerealization" />
+    </fragment>
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.example.myapplicationinst.ChatFragment"
+        android:label="fragment_chat"
+        tools:layout="@layout/fragment_chat" >
+        <action
+            android:id="@+id/action_chatFragment_to_chatBody"
+            app:destination="@id/chatBody" />
+    </fragment>
+    <fragment
+        android:id="@+id/chatBody"
+        android:name="com.example.myapplicationinst.ChatBody"
+        android:label="fragment_chat_body"
+        tools:layout="@layout/fragment_chat_body" >
+        <argument
+            android:name="post"
+            app:argType="com.example.myapplicationinst.util.UserSelerization" />
     </fragment>
 </navigation>

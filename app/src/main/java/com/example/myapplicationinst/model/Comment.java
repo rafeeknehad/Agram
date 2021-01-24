@@ -1,7 +1,9 @@
 package com.example.myapplicationinst.model;
 
+import com.google.firebase.firestore.Exclude;
 import com.google.firebase.firestore.ServerTimestamp;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -12,12 +14,26 @@ public class Comment {
     private String userId;
     private String commentDescription;
     private List<String> userFav;
+    private String commentId;
 
-    public Comment(String postId, String userId, String commentDescription, List<String> userFav) {
+    public Comment() {
+    }
+
+
+    public Comment(String postId, String userId, String commentDescription) {
         this.postId = postId;
         this.userId = userId;
         this.commentDescription = commentDescription;
-        this.userFav = userFav;
+        this.userFav = new ArrayList<>();
+    }
+
+    @Exclude
+    public String getCommentId() {
+        return commentId;
+    }
+
+    public void setCommentId(String commentId) {
+        this.commentId = commentId;
     }
 
     public Date getTimestamp() {

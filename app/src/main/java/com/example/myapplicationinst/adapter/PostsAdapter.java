@@ -36,7 +36,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostsViewHol
     private List<Post> mPostList;
     private Context mContext;
     private User mUser;
-    private PostAdapterIntefrace mListener;
+    private PostAdapterInterface mListener;
 
 
     public PostsAdapter(List<Post> mPostList, Context mContext) {
@@ -92,14 +92,12 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostsViewHol
             holder.mLikePost.setVisibility(View.GONE);
         } else {
             holder.mLikePost.setText(post.getLikeList().size() + " Likes");
-
         }
         if (post.getCommentList().size() == 0) {
             holder.mCommentNumber.setVisibility(View.GONE);
         } else {
             holder.mCommentNumber.setText(post.getCommentList().size() + " Comments");
         }
-
     }
 
     @Override
@@ -107,11 +105,11 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostsViewHol
         return mPostList.size();
     }
 
-    public void setPostAdapterInterface(PostAdapterIntefrace listener) {
+    public void setPostAdapterInterface(PostAdapterInterface listener) {
         mListener = listener;
     }
 
-    public interface PostAdapterIntefrace {
+    public interface PostAdapterInterface {
         public void likePostFun(int position, Post post);
 
         public void removeLikePost(int position, Post post);

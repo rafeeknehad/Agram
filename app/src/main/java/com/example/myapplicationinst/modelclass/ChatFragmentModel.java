@@ -1,14 +1,14 @@
 package com.example.myapplicationinst.modelclass;
 
 import android.app.Application;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.myapplicationinst.model.Comment;
+import com.example.myapplicationinst.HomeFragment;
+import com.example.myapplicationinst.model.Chat;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -18,37 +18,32 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CommentFragmentModel extends AndroidViewModel {
+public class ChatFragmentModel extends AndroidViewModel {
 
-    private static final String TAG = "CommentFragmentModel";
+    private List<Chat> mList;
+    private MutableLiveData<List<Chat>> mLiveData;
 
-    private List<Comment> commentList;
-    private MutableLiveData<List<Comment>> liveData;
-
-    public CommentFragmentModel(@NonNull Application application) {
+    public ChatFragmentModel(@NonNull Application application) {
         super(application);
-
-        commentList = new ArrayList<>();
-        liveData = new MutableLiveData<>();
-
+        mList = new ArrayList<>();
+        mLiveData = new MutableLiveData<>();
     }
 
-    public LiveData<List<Comment>> getData(String postId) {
-        FirebaseFirestore.getInstance()
-                .collection("Comment")
-                .document(postId)
-                .collection("Comments")
+    public LiveData<List<Chat>> getAllData() {
+        FirebaseFirestore
+                .getInstance()
+                .collection("Chat")
+                .document(HomeFragment.userInfo.getUserKey())
+                .collection("Chats")
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for (QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
-                            Comment comment = snapshot.toObject(Comment.class);
-                            comment.setCommentId(snapshot.getId());
-                            commentList.add(comment);
+                            Chat chat = snapshot.toObject(Chat.class);
+                            chat.setMessageId(snapshot.getId());
+                            mList.add(chat);
                         }
-                        Log.d(TAG, "onSuccess: ==== " + commentList.size());
-                        liveData.setValue(commentList);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -57,6 +52,6 @@ public class CommentFragmentModel extends AndroidViewModel {
 
                     }
                 });
-        return liveData;
+        return mLiveData;
     }
 }

@@ -77,7 +77,9 @@ public class HomeFragment extends Fragment {
         mMessageImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if (getView() != null) {
+                    Navigation.findNavController(getView()).navigate(R.id.action_homeFragment_to_chatFragment);
+                }
             }
         });
 
@@ -90,7 +92,7 @@ public class HomeFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
         mRecyclerView.setAdapter(mPostsAdapter);
 
-        mPostsAdapter.setPostAdapterInterface(new PostsAdapter.PostAdapterIntefrace() {
+        mPostsAdapter.setPostAdapterInterface(new PostsAdapter.PostAdapterInterface() {
             @Override
             public void likePostFun(int position, Post post) {
                 Log.d(TAG, "likePostFun: ///// aa");
