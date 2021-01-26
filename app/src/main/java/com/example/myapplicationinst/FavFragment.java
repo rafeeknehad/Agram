@@ -104,9 +104,9 @@ public class FavFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
         mRecyclerView.setAdapter(mFavFragmentAdapter);
 
-        mFavFragmentAdapter.setFavFragmentIntefrace(new FavFragmentAdapter.FavFragmentInterface() {
+        mFavFragmentAdapter.setFavFragmentInterface(new FavFragmentAdapter.FavFragmentInterface() {
             @Override
-            public void comfirmFollowing(int pos, User user) {
+            public void confirmFollowing(int pos, User user) {
                 updateConfirmFirestore(user);
             }
 

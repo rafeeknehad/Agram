@@ -8,7 +8,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.myapplicationinst.HomeFragment;
-import com.example.myapplicationinst.model.Chat;
+import com.example.myapplicationinst.model.Message;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -20,8 +20,8 @@ import java.util.List;
 
 public class ChatFragmentModel extends AndroidViewModel {
 
-    private List<Chat> mList;
-    private MutableLiveData<List<Chat>> mLiveData;
+    private List<Message> mList;
+    private MutableLiveData<List<Message>> mLiveData;
 
     public ChatFragmentModel(@NonNull Application application) {
         super(application);
@@ -29,7 +29,7 @@ public class ChatFragmentModel extends AndroidViewModel {
         mLiveData = new MutableLiveData<>();
     }
 
-    public LiveData<List<Chat>> getAllData() {
+    public LiveData<List<Message>> getAllData() {
         FirebaseFirestore
                 .getInstance()
                 .collection("Chat")
@@ -40,9 +40,9 @@ public class ChatFragmentModel extends AndroidViewModel {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for (QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
-                            Chat chat = snapshot.toObject(Chat.class);
-                            chat.setMessageId(snapshot.getId());
-                            mList.add(chat);
+                            Message message = snapshot.toObject(Message.class);
+                            message.setMessageIds(snapshot.getId());
+                            mList.add(message);
                         }
                     }
                 })

@@ -14,19 +14,17 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplicationinst.adapter.ProfileFragmentAdapter;
-import com.example.myapplicationinst.model.Chat;
 import com.example.myapplicationinst.model.Post;
 import com.example.myapplicationinst.model.User;
 import com.example.myapplicationinst.modelclass.UserProfileModel;
-import com.google.android.gms.tasks.OnCompleteListener;
+import com.example.myapplicationinst.util.UserSelerization;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -107,21 +105,9 @@ public class UserProfile extends Fragment {
         mMessageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Chat chat = new Chat();
-                FirebaseFirestore
-                        .getInstance()
-                        .collection("Chat")
-                        .document(HomeFragment.userInfo.getUserKey())
-                        .collection(mUser.getUserId())
-                        .document("Message")
-                        .get()
-                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                Log.d(TAG, "onComplete: ///// " + task.getResult().exists());
-                            }
-                        });
-
+                if (getView() != null) {
+                    Navigation.findNavController(getView()).navigate(UserProfileDirections.actionUserProfileToChatBody(new UserSelerization(mUser)));
+                }
             }
         });
         return view;

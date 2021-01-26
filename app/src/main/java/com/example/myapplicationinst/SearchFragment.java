@@ -1,5 +1,6 @@
 package com.example.myapplicationinst;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,6 +9,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,10 +38,9 @@ public class SearchFragment extends Fragment {
 
     //adapter
     private SearchFragmentAdapter searchFragmentAdapter;
+    SearchView searchView;
 
     private List<User> searchUser;
-    //private User mCurrentUser;
-    //private String currentUser;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -91,6 +92,7 @@ public class SearchFragment extends Fragment {
                 Log.d(TAG, "getPosition: ---- " + pos + " " + user);
                 SearchToUserProfileFragmentArg arg = new SearchToUserProfileFragmentArg(user);
                 if (getView() != null) {
+                    closeKeyboard();
                     Navigation.findNavController(getView()).navigate(SearchFragmentDirections.actionSearchFragmentToUserProfile
                             (arg));
                 }
@@ -98,20 +100,6 @@ public class SearchFragment extends Fragment {
         });
         return view;
     }
-
-    /*private void setDataForAdapter(List<User> users) {
-        for (String item : mCurrentUser.getSearchingList()) {
-            if (item.equals(HomeFragment.userInfo.getUserKey()))
-                continue;
-            for (User user : users) {
-                if (item.equals(user.getUserKey())) {
-                    seacrhUser.add(user);
-                    break;
-                }
-            }
-        }
-        searchFragmentAdapter.setData(seacrhUser, users);
-    }*/
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
@@ -125,11 +113,11 @@ public class SearchFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.search_fragment_menu_search) {
-            SearchView searchView = (SearchView) item.getActionView();
+            searchView = (SearchView) item.getActionView();
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
-                    return false;
+                    return true;
                 }
 
                 @Override
@@ -142,5 +130,18 @@ public class SearchFragment extends Fragment {
             return true;
         }
         return false;
+    }
+
+
+    private void closeKeyboard() {
+        if (getActivity() != null) {
+            View view = getActivity().getCurrentFocus();
+            InputMethodManager inputMethodManager = (InputMethodManager) getActivity().
+                    getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (view != null) {
+                inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
+        }
+
     }
 }

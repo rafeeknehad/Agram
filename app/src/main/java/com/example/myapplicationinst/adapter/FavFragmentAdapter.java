@@ -45,7 +45,7 @@ public class FavFragmentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
     }
 
-    public void setFavFragmentIntefrace(FavFragmentInterface listener) {
+    public void setFavFragmentInterface(FavFragmentInterface listener) {
         this.mListener = listener;
     }
 
@@ -69,10 +69,7 @@ public class FavFragmentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public int getItemViewType(int position) {
-        //x.class.Isinstace(list.get(position))
-        Log.d(TAG, "getItemViewType: //// size " + mObjectList.size());
-        Log.d(TAG, "getItemViewType: //// " + position);
-        if (User.class.isInstance(mObjectList.get(position))) {
+        if (mObjectList.get(position) instanceof User) {
             return 0;
         } else {
             return 1;
@@ -86,7 +83,7 @@ public class FavFragmentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     public interface FavFragmentInterface {
-        public void comfirmFollowing(int pos, User user);
+        public void confirmFollowing(int pos, User user);
 
         public void deleteFollowing(int pos, User user);
     }
@@ -95,13 +92,11 @@ public class FavFragmentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         private CircleImageView mImageView;
         private TextView mUserName;
-        private Button mConfirm;
-        private Button mDelete;
 
         public RequestFollowingViewHolder(@NonNull View itemView) {
             super(itemView);
-            mConfirm = itemView.findViewById(R.id.cardview_send_request_confirm);
-            mDelete = itemView.findViewById(R.id.cardview_send_request_delete);
+            Button mConfirm = itemView.findViewById(R.id.cardview_send_request_confirm);
+            Button mDelete = itemView.findViewById(R.id.cardview_send_request_delete);
             mImageView = itemView.findViewById(R.id.cardview_send_request_profileuser);
             mUserName = itemView.findViewById(R.id.cardview_send_request_text);
 
@@ -109,7 +104,7 @@ public class FavFragmentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 @Override
                 public void onClick(View v) {
                     if (mListener != null && getAdapterPosition() != RecyclerView.NO_POSITION) {
-                        mListener.comfirmFollowing(getAdapterPosition(), (User) mObjectList.get(getAdapterPosition()));
+                        mListener.confirmFollowing(getAdapterPosition(), (User) mObjectList.get(getAdapterPosition()));
                     }
                 }
             });

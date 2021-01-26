@@ -139,6 +139,7 @@ public class HomeFragment extends Fragment {
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                             userInfo = documentSnapshot.toObject(User.class);
+                            Log.d(TAG, "onSuccess: 00000033 " + documentSnapshot.getId());
                             userInfo.setUserKey(documentSnapshot.getId());
                         }
                     }

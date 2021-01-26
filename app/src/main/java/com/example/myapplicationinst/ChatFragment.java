@@ -12,7 +12,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.myapplicationinst.model.Chat;
+import com.example.myapplicationinst.model.Message;
 import com.example.myapplicationinst.modelclass.ChatFragmentModel;
 
 import java.util.List;
@@ -38,9 +38,9 @@ public class ChatFragment extends Fragment {
 
         //model
         ChatFragmentModel mChatFragmentModel = ViewModelProviders.of(this).get(ChatFragmentModel.class);
-        mChatFragmentModel.getAllData().observe(getViewLifecycleOwner(), new Observer<List<Chat>>() {
+        mChatFragmentModel.getAllData().observe(getViewLifecycleOwner(), new Observer<List<Message>>() {
             @Override
-            public void onChanged(List<Chat> chats) {
+            public void onChanged(List<Message> messages) {
 
             }
         });

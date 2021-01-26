@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="app_name">My Application Inst</string>
 
     <string name="facebook_app_id">434189354441986</string>
@@ -8,4 +8,5 @@
     <string name="logd">***</string>
     <string name="chat">Chat</string>
     <string name="todo">TODO</string>
+    <string name="message">Message</string>
 </resources>
